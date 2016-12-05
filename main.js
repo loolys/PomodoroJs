@@ -4,6 +4,7 @@ var getPomodoroTime, setPomodoroTime;
 var getRestTime, setRestTime;
 var getOnPomdoro, setOnPomodoro;
 var getStopTime, setStopTime;
+var audio = new Audio("http://static1.grsites.com/archive/sounds/bells/bells006.mp3");
 
 (function () {
     
@@ -57,12 +58,15 @@ function pomodoroDecrease() {
         var seconds = (pomodoroTime - minutes * 60).toString();
         var formattedTime = pPTime(minutes, "0",2) +
             ":" + pPTime(seconds,"0",2);
-        console.log(pomodoroTime);
+        //console.log(pomodoroTime);
         $("#time").text(formattedTime);
     } else if (pomodoroTime === 0 && getOnPomdoro()){
+        audio.play();
         var number = parseInt($("#break-time").text());
+        console.log("number in PomodoroDecrease:"+number);
         setRestTime(number * 60);
         setOnPomodoro(false);
+        restTime = getRestTime();
         var minutes = Math.floor(restTime / 60).toString();
         var seconds = (restTime - minutes * 60).toString();
         var formattedTime = pPTime(minutes, "0",2) +
@@ -81,12 +85,15 @@ function restDecrease () {
         var seconds = (restTime - minutes * 60).toString();
         var formattedTime = pPTime(minutes, "0",2) +
             ":" + pPTime(seconds,"0",2);
-        console.log(restTime);
+        //console.log(restTime);
         $("#time").text(formattedTime);
     } else if (restTime === 0 && getOnPomdoro() === false){
+        audio.play();
         var number = parseInt($("#pomodoro-time").text());
+        console.log("Number in rest:" + number);
         setPomodoroTime(number * 60);
         setOnPomodoro(true);
+        pomodoroTime = getPomodoroTime();
         var minutes = Math.floor(pomodoroTime / 60).toString();
         var seconds = (pomodoroTime - minutes * 60).toString();
         var formattedTime = pPTime(minutes, "0",2) +
@@ -101,6 +108,7 @@ $(document).ready(function () {
         if (getStopTime()){
             clearInterval(myInterval);
             setStopTime(false);
+            $("#start").click();
         }
         else if (getOnPomdoro()){
             myInterval = window.setInterval(pomodoroDecrease, 1000);
