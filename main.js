@@ -6,8 +6,15 @@ var getOnPomdoro, setOnPomodoro;
 var getStopTime, setStopTime;
 var audio = new Audio("http://static1.grsites.com/archive/sounds/bells/bells006.mp3");
 
+
+
 (function () {
-    
+    /*
+        Setting up all getters and setters, onPomodoro checks if
+        the program is on a Pomodoro or on a break, stopTime
+        makes sure that clearInterval runs after the timer
+        runs out.
+    */
     var pomodoroTime = 10;
     var restTime = 10;
     var onPomodoro = true;
@@ -46,6 +53,7 @@ var audio = new Audio("http://static1.grsites.com/archive/sounds/bells/bells006.
 }());
 
 function pPTime(string, pad, length){
+    // Pretty prints the minutes and seconds.
     return (new Array(length+1).join(pad)+string).slice(-length);
 }
 
@@ -53,6 +61,9 @@ function pomodoroDecrease() {
     var pomodoroTime = getPomodoroTime();
     var restTime = getRestTime();
     if (pomodoroTime > 0 && getOnPomdoro()) {
+        $("#status-text").text("On Pomodoro");
+        $("#start").hide();
+        $("#interrupt").show();
         setPomodoroTime(pomodoroTime - 1);
         var minutes = Math.floor(pomodoroTime / 60).toString();
         var seconds = (pomodoroTime - minutes * 60).toString();
@@ -62,6 +73,8 @@ function pomodoroDecrease() {
         $("#time").text(formattedTime);
     } else if (pomodoroTime === 0 && getOnPomdoro()){
         audio.play();
+        $("#start").show();
+        $("#interrupt").hide();
         var number = parseInt($("#break-time").text());
         console.log("number in PomodoroDecrease:"+number);
         setRestTime(number * 60);
@@ -80,6 +93,9 @@ function restDecrease () {
     var restTime = getRestTime();
     var pomodoroTime = getPomodoroTime();
     if (restTime > 0 && getOnPomdoro() === false) {
+        $("#status-text").text("On Break")
+        $("#start").hide();
+        $("#interrupt").show();
         setRestTime(restTime - 1);
         var minutes = Math.floor(restTime / 60).toString();
         var seconds = (restTime - minutes * 60).toString();
@@ -89,6 +105,8 @@ function restDecrease () {
         $("#time").text(formattedTime);
     } else if (restTime === 0 && getOnPomdoro() === false){
         audio.play();
+        $("#start").show();
+        $("#interrupt").hide();
         var number = parseInt($("#pomodoro-time").text());
         console.log("Number in rest:" + number);
         setPomodoroTime(number * 60);
@@ -104,8 +122,38 @@ function restDecrease () {
 }
 
 $(document).ready(function () {
+    $("#interrupt").hide();
+    
+    $("#interrupt").click(function(){
+        clearInterval(myInterval);
+        if(getOnPomdoro()){
+            var number = parseInt($("#pomodoro-time").text());
+             setPomodoroTime(number * 60);
+            var minutes = (number).toString();
+            var seconds = "0";
+            var formattedTime = pPTime(minutes, "0",2) +
+                ":" + pPTime(seconds, "0",2);
+            $("#time").text(formattedTime);
+        } else {
+            var number = parseInt($("#break-time").text());
+             setRestTime(number * 60);
+            var minutes = (number).toString();
+            var seconds = "0";
+            var formattedTime = pPTime(minutes, "0",2) +
+                ":" + pPTime(seconds, "0",2);
+            $("#time").text(formattedTime);
+        }
+        $("#interrupt").hide();
+        $("#start").show();
+    });
+    
     $("#start").click(function(){
         if (getStopTime()){
+            /*
+                Stops the timer from running between pomodoro and break
+                and then performs a second click to start the timer on
+                first click.
+            */
             clearInterval(myInterval);
             setStopTime(false);
             $("#start").click();
