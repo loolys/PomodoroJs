@@ -1,0 +1,18 @@
+.pomodoro{
+    max-width: 500px;
+}
+
+p {
+    font-size: 22px;
+}
+a:link {
+    color: black;
+    
+}
+
+a:hover{
+    color: black;
+}
+a:visited {
+    color:black;
+}

@@ -6,9 +6,31 @@
 
     </head>
 <body>
-    <div class="container">
-        <h1 id="time">25:00</h1>
-        <button class="btn btn-primary" id="start">Hello</button>
+    <div class="container pomodoro text-center">
+        <div class="row">
+            <div class="col-xs-6"><p>Pomdoro time</p></div>
+            <div class="col-xs-6"><p>Break Time</p></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6"><p>
+                <a href="#" id="#timer-decrease">-</a>
+                25
+                <a href="#" id="#timer-increase">+</a></p>
+            </div>
+            <div class="col-xs-6">
+                <p>
+                    <a href="#" id="#break-decrease">-</a> 
+                    5 
+                    <a href="#" id="#break-increase">+</a>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+            <h1 id="time">25:00</h1>
+            <button class="btn btn-success btn-group-justified" id="start">Start</button>
+            </div>
+        </div>
     </div>
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
