@@ -15,8 +15,8 @@ var audio = new Audio("http://static1.grsites.com/archive/sounds/bells/bells006.
         makes sure that clearInterval runs after the timer
         runs out.
     */
-    var pomodoroTime = 10;
-    var restTime = 10;
+    var pomodoroTime = 25*60;
+    var restTime = 5*60;
     var onPomodoro = true;
     var stopTime = false;
     
@@ -72,6 +72,7 @@ function pomodoroDecrease() {
         //console.log(pomodoroTime);
         $("#time").text(formattedTime);
     } else if (pomodoroTime === 0 && getOnPomdoro()){
+        $("#status-text").text("");
         audio.play();
         $("#start").text("Start Break");
         $("#start").show();
@@ -94,7 +95,7 @@ function restDecrease () {
     var restTime = getRestTime();
     var pomodoroTime = getPomodoroTime();
     if (restTime > 0 && getOnPomdoro() === false) {
-        $("#status-text").text("On Break")
+        $("#status-text").text("On Break");
         $("#start").hide();
         $("#interrupt").show();
         setRestTime(restTime - 1);
@@ -105,6 +106,7 @@ function restDecrease () {
         //console.log(restTime);
         $("#time").text(formattedTime);
     } else if (restTime === 0 && getOnPomdoro() === false){
+        $("#status-text").text("");
         audio.play();
         $("#start").show();
         $("#start").text("Start Pomodoro");
