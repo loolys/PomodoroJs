@@ -73,6 +73,7 @@ function pomodoroDecrease() {
         $("#time").text(formattedTime);
     } else if (pomodoroTime === 0 && getOnPomdoro()){
         audio.play();
+        $("#start").text("Start Break");
         $("#start").show();
         $("#interrupt").hide();
         var number = parseInt($("#break-time").text());
@@ -106,6 +107,7 @@ function restDecrease () {
     } else if (restTime === 0 && getOnPomdoro() === false){
         audio.play();
         $("#start").show();
+        $("#start").text("Start Pomodoro");
         $("#interrupt").hide();
         var number = parseInt($("#pomodoro-time").text());
         console.log("Number in rest:" + number);
@@ -126,23 +128,15 @@ $(document).ready(function () {
     
     $("#interrupt").click(function(){
         clearInterval(myInterval);
-        if(getOnPomdoro()){
-            var number = parseInt($("#pomodoro-time").text());
-             setPomodoroTime(number * 60);
-            var minutes = (number).toString();
-            var seconds = "0";
-            var formattedTime = pPTime(minutes, "0",2) +
-                ":" + pPTime(seconds, "0",2);
-            $("#time").text(formattedTime);
-        } else {
-            var number = parseInt($("#break-time").text());
-             setRestTime(number * 60);
-            var minutes = (number).toString();
-            var seconds = "0";
-            var formattedTime = pPTime(minutes, "0",2) +
-                ":" + pPTime(seconds, "0",2);
-            $("#time").text(formattedTime);
-        }
+        
+        var number = parseInt($("#pomodoro-time").text());
+         setPomodoroTime(number * 60);
+        var minutes = (number).toString();
+        var seconds = "0";
+        var formattedTime = pPTime(minutes, "0",2) +
+            ":" + pPTime(seconds, "0",2);
+        $("#time").text(formattedTime);
+        setOnPomodoro(true);
         $("#interrupt").hide();
         $("#start").show();
     });
@@ -170,57 +164,69 @@ $(document).ready(function () {
         var number = parseInt($("#pomodoro-time").text());
         if (number > 0){
             $("#pomodoro-time").text(number - 1);
-            setPomodoroTime(number * 60 - 60);
-            if(getOnPomdoro()){
-                var minutes = (number - 1).toString();
-                var seconds = "0";
-                var formattedTime = pPTime(minutes, "0",2) +
-                    ":" + pPTime(seconds, "0",2);
-                $("#time").text(formattedTime);
-            }   
+            if($("#interrupt").is(":visible") === false){
+                setPomodoroTime(number * 60 - 60);
+                if(getOnPomdoro()){
+                    var minutes = (number - 1).toString();
+                    var seconds = "0";
+                    var formattedTime = pPTime(minutes, "0",2) +
+                        ":" + pPTime(seconds, "0",2);
+                    $("#time").text(formattedTime);
+                }   
+            }
+            
         }
              
     });
     $("#timer-increase").click(function(){
         var number = parseInt($("#pomodoro-time").text());
         $("#pomodoro-time").text(number + 1); 
-        setPomodoroTime(number * 60 + 60);
-        if (getOnPomdoro()){
-            var minutes = (number + 1).toString();
-            var seconds = "0";
-            var formattedTime = pPTime(minutes, "0",2) +
-                ":" + pPTime(seconds, "0",2);
-            $("#time").text(formattedTime);
+        if($("#interrupt").is(":visible") === false){
+            setPomodoroTime(number * 60 + 60);
+            if (getOnPomdoro()){
+                var minutes = (number + 1).toString();
+                var seconds = "0";
+                var formattedTime = pPTime(minutes, "0",2) +
+                    ":" + pPTime(seconds, "0",2);
+                $("#time").text(formattedTime);
+            }
         }
+        
         
     });
     $("#break-decrease").click(function(){
         var number = parseInt($("#break-time").text());
         if (number > 0){
             $("#break-time").text(number - 1);
-            setRestTime(number * 60 - 60);
-            if (getOnPomdoro() === false){
-                var minutes = (number - 1).toString();
-                var seconds = "0";
-                var formattedTime = pPTime(minutes, "0",2) +
-                    ":" + pPTime(seconds, "0",2);
-                $("#time").text(formattedTime);
+            if($("#interrupt").is(":visible") === false){
+                setRestTime(number * 60 - 60);
+                if (getOnPomdoro() === false){
+                    var minutes = (number - 1).toString();
+                    var seconds = "0";
+                    var formattedTime = pPTime(minutes, "0",2) +
+                        ":" + pPTime(seconds, "0",2);
+                    $("#time").text(formattedTime);
+                }
             }
+            
             
         } 
         
     });
     $("#break-increase").click(function(){
         var number = parseInt($("#break-time").text());
-        $("#break-time").text(number + 1); 
-        setRestTime(number * 60 + 60);
-        if (getOnPomdoro() === false){
-            var minutes = (number + 1).toString();
-            var seconds = "0";
-            var formattedTime = pPTime(minutes, "0",2) +
-                ":" + pPTime(seconds, "0",2);
-            $("#time").text(formattedTime);
+        $("#break-time").text(number + 1);
+        if($("#interrupt").is(":visible") === false){
+            setRestTime(number * 60 + 60);
+            if (getOnPomdoro() === false){
+                var minutes = (number + 1).toString();
+                var seconds = "0";
+                var formattedTime = pPTime(minutes, "0",2) +
+                    ":" + pPTime(seconds, "0",2);
+                $("#time").text(formattedTime);
+            }
         }
+        
         
     });
 });

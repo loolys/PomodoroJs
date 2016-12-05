@@ -1,18 +1,20 @@
 .pomodoro{
     max-width: 500px;
+    background-color: black;
+    color: white;
 }
 
 p {
     font-size: 22px;
 }
 a:link {
-    color: black;
+    color: white;
     
 }
 
 a:hover{
-    color: black;
+    color: orange;
 }
 a:visited {
-    color:black;
+    color: white;
 }
